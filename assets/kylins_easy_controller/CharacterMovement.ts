@@ -1,4 +1,4 @@
-import { _decorator, Component, Node, v3, RigidBody, Vec3, find, Camera, SkeletalAnimation, AnimationClip, Collider, ICollisionEvent } from 'cc';
+import { _decorator, Component, Node, v3, RigidBody, Vec3, find, Camera, SkeletalAnimation, AnimationClip, Collider, ICollisionEvent, sys } from 'cc';
 import { EasyController, EasyControllerEvent } from './EasyController';
 const { ccclass, property } = _decorator;
 
@@ -89,8 +89,22 @@ export class CharacterMovement extends Component {
         EasyController.off(EasyControllerEvent.MOVEMENT_STOP, this.onJump, this);
     }
 
-    update(deltaTime: number) {
+    update(deltaTime: number) { 
         if (this._isMoving) {
+            if(!sys.isMobile){
+                /////
+                let cameraRotationY = 0;
+                if (this.mainCamera) {
+                    cameraRotationY = this.mainCamera.node.eulerAngles.y;
+                }
+                this._velocityScale = this._offset;
+                //В 2D-интерфейсе положительный X равен 0, а в 3D-сцене положительный X 
+                //равен 0, поэтому требуется -90 градусов. (Поворот на 90 градусов по часовой стрелке)
+                this._tmp.set(0, cameraRotationY + this._degree - 90 + 180, 0);
+                this.node.setRotationFromEuler(this._tmp);
+                //////
+            }
+
             this._tmp.set(this.node.forward);
             this._tmp.multiplyScalar(-1.0);
             this._tmp.multiplyScalar(this.velocity * this._velocityScale);
@@ -145,13 +159,20 @@ export class CharacterMovement extends Component {
     }
 
     private _tmp = v3();
+    private _degree =0;
+    private _offset =0;
+
     onMovement(degree: number, offset: number) {
+        this._degree = degree;
+        this._offset = offset;
+
         let cameraRotationY = 0;
         if (this.mainCamera) {
             cameraRotationY = this.mainCamera.node.eulerAngles.y;
         }
         this._velocityScale = offset;
-        //2D界面是 正X 为 0， 3D场景是 正前方为0，所以需要 - 90 度。（顺时针转90度）
+        //В 2D-интерфейсе положительный X равен 0, а в 3D-сцене положительный X 
+        //равен 0, поэтому требуется -90 градусов. (Поворот на 90 градусов по часовой стрелке)
         this._tmp.set(0, cameraRotationY + degree - 90 + 180, 0);
         this.node.setRotationFromEuler(this._tmp);
         if (this._anim) {
@@ -177,9 +198,8 @@ export class CharacterMovement extends Component {
         }
     }
 
-    onJump(btnName:string) {
-        console.log(btnName);
-        if(btnName != 'btn_slot_0'){
+    onJump(btnName:string) { 
+        if(btnName != 'btn_slot_0' && btnName != 'btn_slot_5'){
             return;
         }
         if (this._curJumpTimes >= this.maxJumpTimes) {

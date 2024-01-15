@@ -59,6 +59,8 @@ export class UI_Joystick extends Component {
         checkerMovement.node.on(Input.EventType.TOUCH_END, this.onTouchUp_Movement, this);
         checkerMovement.node.on(Input.EventType.TOUCH_CANCEL, this.onTouchUp_Movement, this);
 
+        checkerMovement.node.on(Input.EventType.MOUSE_MOVE, this.onMouse_Movement, this);
+
 
         this._checkerCamera = checkerCamera;
 
@@ -74,11 +76,17 @@ export class UI_Joystick extends Component {
         this._key2buttonMap[KeyCode.KEY_U] = 'btn_slot_3';
         this._key2buttonMap[KeyCode.KEY_I] = 'btn_slot_4';
 
+        this._key2buttonMap[KeyCode.SPACE] = 'btn_slot_5';
+
         input.on(Input.EventType.KEY_DOWN, this.onKeyDown, this);
         input.on(Input.EventType.KEY_UP, this.onKeyUp, this);
         input.on(Input.EventType.MOUSE_WHEEL,this.onMouseWheel, this);
 
         this._scene = director.getScene();
+    }
+
+    onMouse_Movement(event: EventTouch) {
+       // console.log(event.get)
     }
 
     onDestroy() {

@@ -1,4 +1,4 @@
-import { _decorator, Component, Node, Vec3, v3 } from 'cc';
+import { _decorator, Component, Node, Vec3, v3, sys } from 'cc';
 import { EasyController, EasyControllerEvent } from './EasyController';
 const { ccclass, property } = _decorator;
 
@@ -58,7 +58,12 @@ export class ThirdPersonCamera extends Component {
         //rotation
         v3_1.set(this.node.eulerAngles);
         Vec3.lerp(v3_1, v3_1, this._targetAngles, t);
-        this.node.setRotationFromEuler(v3_1);
+
+
+        if(sys.isMobile){
+            //TODO! only tach screen
+            this.node.setRotationFromEuler(v3_1);
+        }
 
         //lookat
         v3_1.set(this.target.worldPosition);
