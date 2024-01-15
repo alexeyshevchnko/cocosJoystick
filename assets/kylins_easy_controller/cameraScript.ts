@@ -6,11 +6,7 @@ export class cameraScript extends Component {
 
     @property(Component)
     targetNode: Component = null; 
-
-    private mouseXSensitvity: number = 8;
-    private mouseYSensitvity: number = 5;
-    private mousePos = new Vec3(0, 0, 0); 
-    private varStart:number;
+ 
     screenCenterX: number;
     screenCenterY: number;
 
@@ -26,11 +22,7 @@ export class cameraScript extends Component {
             return;
         }  
        input.on(Input.EventType.MOUSE_DOWN, this.onMouseDown, this);
-        
-       const canvasSize = view.getCanvasSize();
-        this.screenCenterX =canvasSize.width / 2;
-        this.screenCenterY = canvasSize.height / 2;
-
+      
         game.canvas.addEventListener("mousemove", this.onMouseMove.bind(this));
         window.addEventListener("mousemove", this.onMouseMove.bind(this));
     }
@@ -46,8 +38,7 @@ export class cameraScript extends Component {
             return;
         } 
 
-        const targetRotation = new Vec3(-this.verticalRotation, -this.horizontalRotation, 0);
-        const lerpFactor = 0.1; // Фактор интерполяции
+        const targetRotation = new Vec3(-this.verticalRotation, -this.horizontalRotation, 0); 
         var rot :Vec3 = new Vec3();
         Vec3.lerp(rot, this.node.eulerAngles, targetRotation, deltaTime * 10);
         // Плавно измените углы с использованием lerp
@@ -73,29 +64,5 @@ export class cameraScript extends Component {
             } 
         }
     }
-
-    lockChange() {
-        if (document.pointerLockElement === game.canvas ) {
-            this.varStart = 1;
-        } else {
-            this.varStart = 3;
-          setTimeout( () => { this.varStart = 0; }, 1800 );
-        }
-    }
  
-    onMouseMoveOld(event:EventMouse){ 
-        /*
-        this.mousePos.x = 330 + event.getLocation().y/this.mouseXSensitvity;
-        this.mousePos.y = -event.getLocation().x/this.mouseYSensitvity; 
-        console.log("this.mousePos = " + this.mousePos);
-        */
-
-        this.horizontalRotation += event.getDeltaX() * this.sensitivity;
-        this.verticalRotation += event.getDeltaY() * this.sensitivity;
-
-        // Ограничение угла наклона по вертикали
-        this.verticalRotation = math.clamp(this.verticalRotation, this.minAngle, this.maxAngle);
-
-        console.log("event.getDeltaX() : ",  event.getDeltaX());
-    }
 }
