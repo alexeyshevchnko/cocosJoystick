@@ -5,108 +5,81 @@ const { ccclass, property } = _decorator;
 
 @ccclass('StepController')
 export class StepController extends Component {
-
     @property(ThirdPersonCamera)
     thirdPersonCamera : ThirdPersonCamera = null;
-
     @property(CameraScript)
     cameraScript : CameraScript = null;
-
-    
-
+    @property(AudioSource)
+    myAudioSource : AudioSource = null;
+    @property(AudioSource)
+    myAudioSourceJamp : AudioSource = null;
+    @property(AudioClip)  
+    footstep1 : AudioClip = null;
+    @property(AudioClip)  
+    footstep2 : AudioClip = null;
+    @property(AudioClip)  
+    footstep3 : AudioClip = null;
+    @property(AudioClip)  
+    footstep4 : AudioClip = null; 
+    @property(AudioClip)  
+    jampClip : AudioClip = null; 
+    @property(AudioClip)  
+    landClip : AudioClip = null; 
     @property(Node)
     go : Node = null;
     @property(Node)
     playerNode : Node = null;
-    private velocityChange: Vec3 = v3();
-    private prevPosition: Vec3 = v3();
-    private prevVelocity: Vec3 = v3();
-   
     @property
     LookSensitivity: number = 2.0;
-
     @property
     ShootSensitivity: number = 1.0;
- 
     @property
     Smooth: number = 25;
- 
-    private originalLocalPos: Vec3 = v3();
 
-    private nextStepTime: number = 0.5;
-    private headBobCycle: number = 0;
-    private headBobFade: number = 0;
-
-    private springPos: number = 0;
-    private springVelocity: number = 0;
-    private springElastic: number = 1.1;
-    private springDampen: number = 0.8;
-    private springVelocityThreshold: number = 0.05;
-    private springPositionThreshold: number = 0.05;
-
-    
-    private velocity: Vec3 = v3(); 
-    private prevGrounded: boolean = true;
-
-    private flatVelocity: number;
-    private strideLengthen: number;
-    private bobFactor: number;
-    private bobSwayFactor: number;
-    private speedHeightFactor: number;
-    private xPos: number;
-    private yPos: number;
-    private xTilt: number;
-    private zTilt: number;
-    private stepVolume: number;
-    private InputX: number;
-    private InputY: number;
-
-    private headBobStrideSpeedLengthen: number = 0.35;
-    private headBobBobFrequency: number = 1.5;
-    private headBobHeightSpeedMultiplier: number = 0.35;
-    private headBobBobSideMovement: number = 0.05;
-    private headBobJumpLandMove: number = 1;
-    private headBobBobHeight: number = 0.3;
-    private headBobJumpLandTilt: number = 10;
-    private headBobBobSwayAngle: number = 0.5;
-
-    
-    private fixedUpdateInterval: number = 0.02; 
-    private accumulatedTime: number = 0;
-
+    footsteps : AudioClip[] =null;
+    grounded: boolean = false;
+    velocityChange: Vec3 = v3();
+    prevPosition: Vec3 = v3();
+    prevVelocity: Vec3 = v3();
+    originalLocalPos: Vec3 = v3();
+    nextStepTime: number = 0.5;
+    headBobCycle: number = 0;
+    headBobFade: number = 0;
+    springPos: number = 0;
+    springVelocity: number = 0;
+    springElastic: number = 1.1;
+    springDampen: number = 0.8;
+    springVelocityThreshold: number = 0.05;
+    springPositionThreshold: number = 0.05;
+    velocity: Vec3 = v3(); 
+    prevGrounded: boolean = true;
+    flatVelocity: number;
+    strideLengthen: number;
+    bobFactor: number;
+    bobSwayFactor: number;
+    speedHeightFactor: number;
+    xPos: number;
+    yPos: number;
+    xTilt: number;
+    zTilt: number;
+    stepVolume: number;
+    InputX: number;
+    InputY: number;
+    fixedUpdateInterval: number = 0.02; 
+    accumulatedTime: number = 0;
+    targetRot: Vec3 = v3();  
+    targetPos: Vec3 = v3();  
+    lerpSpeed: number = 2.7; 
     startPos:Vec3 = v3();
 
-    @property(AudioSource)
-    myAudioSource : AudioSource = null;
-
-    @property(AudioSource)
-    myAudioSourceJamp : AudioSource = null;
-
-    @property(AudioClip)  
-    footstep1 : AudioClip = null;
-
-    @property(AudioClip)  
-    footstep2 : AudioClip = null;
-
-    @property(AudioClip)  
-    footstep3 : AudioClip = null;
-
-    @property(AudioClip)  
-    footstep4 : AudioClip = null; 
-
-    @property(AudioClip)  
-    jampClip : AudioClip = null; 
-
-    @property(AudioClip)  
-    landClip : AudioClip = null; 
-
-
-    
-    footsteps : AudioClip[] =null;
-
-    private grounded: boolean = false;
-
- 
+    headBobStrideSpeedLengthen: number = 0.35;
+    headBobBobFrequency: number = 1.5;
+    headBobHeightSpeedMultiplier: number = 0.35;
+    headBobBobSideMovement: number = 0.05;
+    headBobJumpLandMove: number = 1;
+    headBobBobHeight: number = 0.3;
+    headBobJumpLandTilt: number = 10;
+    headBobBobSwayAngle: number = 0.5;
 
     checkGrounded() {
        
@@ -140,16 +113,12 @@ export class StepController extends Component {
 
     start(): void {
         this.startPos = this.go.getPosition().clone(); 
-
-
         this.footsteps  = [
             this.footstep1,
             this.footstep2,
             this.footstep3,
             this.footstep4
-        ];
-
-        console.log("=== >>>> " + this.footsteps.length);
+        ]; 
     }
 
     update(deltaTime: number): void {
@@ -211,8 +180,7 @@ export class StepController extends Component {
         else
         {
             this.headBobFade = math.lerp(this.headBobFade, 1, deltaTime);
-        }
-       // console.log(this.headBobFade);
+        } 
 
         // height of bob is exaggerated based on speed
         this.speedHeightFactor = 1 + (this.flatVelocity * this.headBobHeightSpeedMultiplier);
@@ -222,11 +190,7 @@ export class StepController extends Component {
         this.yPos = this.springPos * this.headBobJumpLandMove + this.bobFactor * this.headBobBobHeight * this.headBobFade * this.speedHeightFactor;
         this.xTilt = -this.springPos * this.headBobJumpLandTilt;
         this.zTilt = this.bobSwayFactor * this.headBobBobSwayAngle * this.headBobFade;
-
-        //var rot;
-        //Quat.fromEuler(rot,  this.xTilt, 0,  this.zTilt);
-
-        //console.log(new Vec3(this.xPos, this.yPos, 0));
+ 
         this.targetPos = (new Vec3(this.xPos * 3 , this.yPos * 3 , 0));
         
         var lerp =this.go.position.lerp(this.targetPos, this.lerpSpeed * deltaTime);
@@ -236,14 +200,11 @@ export class StepController extends Component {
  
         
        
-        Vec3.lerp(this.targetRot, this.targetRot, new Vec3( this.xTilt * 3, 0,  this.zTilt * 3),this.lerpSpeed * deltaTime);
-       // this.targetRot =  new Vec3( this.xTilt , 0,  this.zTilt);
-       this.cameraScript.setStepRot( this.targetRot.clone());//lerpRot.clone());
+        Vec3.lerp(this.targetRot, this.targetRot, new Vec3( this.xTilt * 3, 0,  this.zTilt * 3),this.lerpSpeed * deltaTime); 
+       this.cameraScript.setStepRot( this.targetRot.clone()); 
        
        this.thirdPersonCamera.setStepRot( this.targetRot.clone());
-
-       //this.node.setRotationFromEuler(this.targetRot); 
-
+ 
        if(this.grounded){
             if (this.headBobCycle > this.nextStepTime){
                 // time for next footstep sound:
@@ -251,22 +212,13 @@ export class StepController extends Component {
                 // play footstep sounds
                 let randomIndex = Math.floor(Math.random() * this.footsteps.length);
                 let randomClip = this.footsteps[randomIndex];
-                this.PlayFootstepSounds(randomClip);
+                this.playSounds(randomClip);
             }
         }
     }
-    private targetRot: Vec3 = v3();  
-    private targetPos: Vec3 = v3();  
-    private lerpSpeed: number = 2.7; 
-
-
-
-    
-    PlayFootstepSounds(clip: AudioClip) { 
+ 
+    playSounds(clip: AudioClip) { 
         this.myAudioSource.clip = clip;
         this.myAudioSource.play(); 
     }
-    
 }
-
-
