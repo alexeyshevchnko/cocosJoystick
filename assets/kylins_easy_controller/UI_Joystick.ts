@@ -58,7 +58,6 @@ export class UI_Joystick extends Component {
         checkerMovement.node.on(Input.EventType.TOUCH_MOVE, this.onTouchMove_Movement, this);
         checkerMovement.node.on(Input.EventType.TOUCH_END, this.onTouchUp_Movement, this);
         checkerMovement.node.on(Input.EventType.TOUCH_CANCEL, this.onTouchUp_Movement, this);
-
         checkerMovement.node.on(Input.EventType.MOUSE_MOVE, this.onMouse_Movement, this);
 
 
@@ -223,14 +222,15 @@ export class UI_Joystick extends Component {
         this._distanceOfTwoTouchPoint = this.getDistOfTwoTouchPoints();
     }
 
+ 
     private onTouchMove_CameraCtrl(event: EventTouch) {
-        let touches = event.getTouches();
+        let touches = event.getTouches(); 
         for (let i = 0; i < touches.length; ++i) {
             let touch = touches[i];
             let touchID = touch.getID();
             //two touches, do camera zoom.
             if (this._cameraTouchA && this._cameraTouchB) {
-                console.log(touchID, this._cameraTouchA.getID(), this._cameraTouchB.getID());
+                //console.log(touchID, this._cameraTouchA.getID(), this._cameraTouchB.getID());
                 let needZoom = false;
                 if (touchID == this._cameraTouchA.getID()) {
                     this._cameraTouchA = touch;
@@ -238,7 +238,7 @@ export class UI_Joystick extends Component {
                 }
                 if (touchID == this._cameraTouchB.getID()) {
                     this._cameraTouchB = touch;
-                    needZoom = true;
+                    needZoom = true; 
                 }
 
                 if (needZoom) {
@@ -247,7 +247,7 @@ export class UI_Joystick extends Component {
                     this._scene.emit(EasyControllerEvent.CAMERA_ZOOM, delta);
                     this._distanceOfTwoTouchPoint = newDist;
                 }
-            }
+            } 
             //only one touch, do camera rotate.
             else if (this._cameraTouchA && touchID == this._cameraTouchA.getID()) {
                 let dt = touch.getDelta();

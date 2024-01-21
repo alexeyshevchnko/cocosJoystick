@@ -7,6 +7,10 @@
     {
       "name": "COPY",
       "value": 2
+    },
+    {
+      "name": "PALYER",
+      "value": 4
     }
   ],
   "general": {

@@ -1,8 +1,8 @@
-import { _decorator, Component, Input, Vec3, input,  game, Node, tween, EventMouse, sys, math, renderer, Camera, view } from 'cc'; 
+import { _decorator, Component, Input, Vec3, input,  game, Node, tween, EventMouse, sys, math, renderer, Camera, view, v3 } from 'cc'; 
 const { ccclass, property } = _decorator;
  
-@ccclass('cameraScript')
-export class cameraScript extends Component {
+@ccclass('CameraScript')
+export class CameraScript extends Component {
 
     @property(Component)
     targetNode: Component = null; 
@@ -16,6 +16,8 @@ export class cameraScript extends Component {
 
     private horizontalRotation: number = 0;
     private verticalRotation: number = 0;
+    @property
+    tweenTime:number = 0.2;
 
     start() {
         if(sys.isMobile){
@@ -33,18 +35,39 @@ export class cameraScript extends Component {
         this.verticalRotation = math.clamp(this.verticalRotation, this.minAngle, this.maxAngle); 
     }
 
+    _stepRot:Vec3 = v3();
+    public setStepRot(stepRot:Vec3){
+        this._stepRot = stepRot;
+     // this._stepRot = v3();
+    }
+    
     update(deltaTime: number) { 
         if(sys.isMobile){
+            /*
+            const targetRotation = new Vec3( this._stepRot.x, 0, this._stepRot.z); 
+            var rot :Vec3 = new Vec3();
+            Vec3.lerp(rot, this.node.eulerAngles , targetRotation, deltaTime * 20); 
+            this.node.eulerAngles = rot;
+ 
+            */
             return;
         } 
 
-        const targetRotation = new Vec3(-this.verticalRotation, -this.horizontalRotation, 0); 
-        var rot :Vec3 = new Vec3();
-        Vec3.lerp(rot, this.node.eulerAngles, targetRotation, deltaTime * 10);
-        // Плавно измените углы с использованием lerp
-        this.node.eulerAngles = rot;
 
-        //this.node.setRotationFromEuler(new  Vec3(-this.verticalRotation, -this.horizontalRotation, 0));
+        const targetRotation = new Vec3(-this.verticalRotation + this._stepRot.x, -this.horizontalRotation, this._stepRot.z); 
+
+        /*
+        const t = Math.min(deltaTime / this.tweenTime, 1.0);
+        var v3_1 : Vec3 = v3();
+        v3_1.set(this.node.eulerAngles);
+        Vec3.lerp(v3_1, v3_1, targetRotation, t *5);
+        this.node.setRotationFromEuler(v3_1);
+       */
+        
+        var rot :Vec3 = new Vec3();
+        Vec3.lerp(rot, this.node.eulerAngles , targetRotation, deltaTime * 20); 
+        this.node.eulerAngles = rot; 
+        
     }
 
     pointerLock: boolean =false;
