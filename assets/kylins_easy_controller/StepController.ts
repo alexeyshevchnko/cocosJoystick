@@ -36,54 +36,54 @@ export class StepController extends Component {
     @property
     Smooth: number = 25;
 
-    footsteps : AudioClip[] =null;
-    grounded: boolean = false;
-    velocityChange: Vec3 = v3();
-    prevPosition: Vec3 = v3();
-    prevVelocity: Vec3 = v3();
-    originalLocalPos: Vec3 = v3();
-    nextStepTime: number = 0.5;
-    headBobCycle: number = 0;
-    headBobFade: number = 0;
-    springPos: number = 0;
-    springVelocity: number = 0;
-    springElastic: number = 1.1;
-    springDampen: number = 0.8;
-    springVelocityThreshold: number = 0.05;
-    springPositionThreshold: number = 0.05;
-    velocity: Vec3 = v3(); 
-    prevGrounded: boolean = true;
-    flatVelocity: number;
-    strideLengthen: number;
-    bobFactor: number;
-    bobSwayFactor: number;
-    speedHeightFactor: number;
-    xPos: number;
-    yPos: number;
-    xTilt: number;
-    zTilt: number;
-    stepVolume: number;
-    InputX: number;
-    InputY: number;
-    fixedUpdateInterval: number = 0.02; 
-    accumulatedTime: number = 0;
-    targetRot: Vec3 = v3();  
-    targetPos: Vec3 = v3();  
-    lerpSpeed: number = 2.7; 
-    startPos:Vec3 = v3();
+    _footsteps : AudioClip[] =null;
+    _grounded: boolean = false;
+    _velocityChange: Vec3 = v3();
+    _prevPosition: Vec3 = v3();
+    _prevVelocity: Vec3 = v3();
+    _originalLocalPos: Vec3 = v3();
+    _nextStepTime: number = 0.5;
+    _headBobCycle: number = 0;
+    _headBobFade: number = 0;
+    _springPos: number = 0;
+    _springVelocity: number = 0;
+    _springElastic: number = 1.1;
+    _springDampen: number = 0.8;
+    _springVelocityThreshold: number = 0.05;
+    _springPositionThreshold: number = 0.05;
+    _velocity: Vec3 = v3(); 
+    _prevGrounded: boolean = true;
+    _flatVelocity: number;
+    _strideLengthen: number;
+    _bobFactor: number;
+    _bobSwayFactor: number;
+    _speedHeightFactor: number;
+    _xPos: number;
+    _yPos: number;
+    _xTilt: number;
+    _zTilt: number;
+    _stepVolume: number;
+    _inputX: number;
+    _inputY: number;
+    _fixedUpdateInterval: number = 0.02; 
+    _accumulatedTime: number = 0;
+    _targetRot: Vec3 = v3();  
+    _targetPos: Vec3 = v3();  
+    _lerpSpeed: number = 2.7; 
+    _startPos:Vec3 = v3();
 
-    headBobStrideSpeedLengthen: number = 0.35;
-    headBobBobFrequency: number = 1.5;
-    headBobHeightSpeedMultiplier: number = 0.35;
-    headBobBobSideMovement: number = 0.05;
-    headBobJumpLandMove: number = 1;
-    headBobBobHeight: number = 0.3;
-    headBobJumpLandTilt: number = 10;
-    headBobBobSwayAngle: number = 0.5;
+    _headStrideSpeedLengthen: number = 0.35;
+    _headFrequency: number = 1.5;
+    _headHeightSpeedMultiplier: number = 0.35;
+    _headSideMovement: number = 0.05;
+    _headJumpLandMove: number = 1;
+    _headHeight: number = 0.3;
+    _headJumpLandTilt: number = 10;
+    _headSwayAngle: number = 0.5;
 
     checkGrounded() {
        
-        var oldIsGrounded = this.grounded;
+        var oldIsGrounded = this._grounded;
 
         const worldRay = new geometry.Ray(this.playerNode.position.x, this.playerNode.position.y , this.playerNode.position.z, 0, -1, 0);
         const mask = 0xffffffff;  // Маска слоев для проверки коллизий
@@ -95,13 +95,13 @@ export class StepController extends Component {
   
 
         const bResult = PhysicsSystem.instance.raycast(worldRay, mask & invertedPlayerMask, maxDistance, queryTrigger); 
-        this.grounded = bResult; 
+        this._grounded = bResult; 
         
-        if(oldIsGrounded && !this.grounded){
+        if(oldIsGrounded && !this._grounded){
             this.PlayFootstepSoundJamp(this.jampClip);
         }
 
-        if(!oldIsGrounded && this.grounded){
+        if(!oldIsGrounded && this._grounded){
             this.PlayFootstepSoundJamp(this.landClip);
         }
     }
@@ -112,8 +112,8 @@ export class StepController extends Component {
     }
 
     start(): void {
-        this.startPos = this.go.getPosition().clone(); 
-        this.footsteps  = [
+        this._startPos = this.go.getPosition().clone(); 
+        this._footsteps  = [
             this.footstep1,
             this.footstep2,
             this.footstep3,
@@ -123,95 +123,88 @@ export class StepController extends Component {
 
     update(deltaTime: number): void {
         this.checkGrounded();
-        this.accumulatedTime += deltaTime;
+        this._accumulatedTime += deltaTime;
  
-        while (this.accumulatedTime >= this.fixedUpdateInterval) {
-            this.fixedUpdate(this.fixedUpdateInterval, this.fixedUpdateInterval);
-            this.accumulatedTime -= this.fixedUpdateInterval;
+        while (this._accumulatedTime >= this._fixedUpdateInterval) {
+            this.fixedUpdate(this._fixedUpdateInterval, this._fixedUpdateInterval);
+            this._accumulatedTime -= this._fixedUpdateInterval;
         } 
     }
-
+ 
     private fixedUpdate(fixedDeltaTime: number, deltaTime: number): void { 
         //control footsteps volume based on player move speed;
         // we use the actual distance moved as the velocity since last frame, rather than reading
         //the rigidbody's velocity, because this prevents the 'running against a wall' effect.
         let velocity: Vec3 = new Vec3();
         let currentPosition: Vec3 = this.node.position;
-        velocity.set(currentPosition.x - this.prevPosition.x, currentPosition.y - this.prevPosition.y, currentPosition.z - this.prevPosition.z);
+        velocity.set(currentPosition.x - this._prevPosition.x, currentPosition.y - this._prevPosition.y, currentPosition.z - this._prevPosition.z);
         velocity.x /= deltaTime;
         velocity.y /= deltaTime;
         velocity.z /= deltaTime; 
-        this.velocityChange.set(velocity.x - this.prevVelocity.x, velocity.y - this.prevVelocity.y, velocity.z - this.prevVelocity.z);
-        this.prevPosition.set(currentPosition);
-        this.prevVelocity.set(velocity);
+        this._velocityChange.set(velocity.x - this._prevVelocity.x, velocity.y - this._prevVelocity.y, velocity.z - this._prevVelocity.z);
+        this._prevPosition.set(currentPosition);
+        this._prevVelocity.set(velocity);
         
-        this.springVelocity -= this.velocityChange.y;	            // input to spring from change in character Y velocity
-        this.springVelocity -= this.springPos * this.springElastic;	// elastic spring force towards zero position
-        this.springVelocity *= this.springDampen;				    // damping towards zero velocity
-        this.springPos += this.springVelocity * deltaTime;			// output to head Y position
-        this.springPos = math.clamp(this.springPos, -0.3, 0.3);		// clamp spring distance
+        this._springVelocity -= this._velocityChange.y;	            // input to spring from change in character Y velocity
+        this._springVelocity -= this._springPos * this._springElastic;	// elastic spring force towards zero position
+        this._springVelocity *= this._springDampen;				    // damping towards zero velocity
+        this._springPos += this._springVelocity * deltaTime;			// output to head Y position
+        this._springPos = math.clamp(this._springPos, -0.3, 0.3);		// clamp spring distance
 
         // snap spring values to zero if almost stopped:
-        if (Math.abs(this.springVelocity) < this.springVelocityThreshold && Math.abs(this.springPos) < this.springPositionThreshold) {
-            this.springVelocity = 0;
-            this.springPos = 0;
+        if (Math.abs(this._springVelocity) < this._springVelocityThreshold && Math.abs(this._springPos) < this._springPositionThreshold) {
+            this._springVelocity = 0;
+            this._springPos = 0;
         }
 
         // head bob cycle is based on "flat" velocity (i.e. excluding Y)
-        this.flatVelocity = new Vec3(velocity.x, 0, velocity.z).length();
+        this._flatVelocity = new Vec3(velocity.x, 0, velocity.z).length();
 
         // lengthen stride based on speed (so run bobbing isn't lots of little steps)
-        this.strideLengthen = 1 + (this.flatVelocity * this.headBobStrideSpeedLengthen);
+        this._strideLengthen = 1 + (this._flatVelocity * this._headStrideSpeedLengthen);
 
         // increment cycle
-        this.headBobCycle += (this.flatVelocity / this.strideLengthen) * (deltaTime / this.headBobBobFrequency);
+        this._headBobCycle += (this._flatVelocity / this._strideLengthen) * (deltaTime / this._headFrequency);
 
         // actual bobbing and swaying values calculated using Sine wave
-        this.bobFactor = Math.sin(this.headBobCycle * Math.PI * 2);
-        this.bobSwayFactor = Math.sin(this.headBobCycle * Math.PI * 2 + Math.PI * 0.5); // sway is offset along the sin curve by a quarter-turn in radians
-        this.bobFactor = 1 - (this.bobFactor * 0.5 + 1);                                // bob value is brought into 0-1 range and inverted
-        this.bobFactor *= this.bobFactor;                                               // bob value is biased towards 0
+        this._bobFactor = Math.sin(this._headBobCycle * Math.PI * 2);
+        this._bobSwayFactor = Math.sin(this._headBobCycle * Math.PI * 2 + Math.PI * 0.5); // sway is offset along the sin curve by a quarter-turn in radians
+        this._bobFactor = 1 - (this._bobFactor * 0.5 + 1);                                // bob value is brought into 0-1 range and inverted
+        this._bobFactor *= this._bobFactor;                                               // bob value is biased towards 0
          
         // fade head bob effect to zero if not moving
-        if (new Vec3(velocity.x, 0, velocity.z).length() < 0.1)
-        {
-            this.headBobFade = math.lerp(this.headBobFade, 0, deltaTime);
+        if (new Vec3(velocity.x, 0, velocity.z).length() < 0.1) {
+            this._headBobFade = math.lerp(this._headBobFade, 0, deltaTime);
         }
-        else
-        {
-            this.headBobFade = math.lerp(this.headBobFade, 1, deltaTime);
+        else {
+            this._headBobFade = math.lerp(this._headBobFade, 1, deltaTime);
         } 
 
         // height of bob is exaggerated based on speed
-        this.speedHeightFactor = 1 + (this.flatVelocity * this.headBobHeightSpeedMultiplier);
+        this._speedHeightFactor = 1 + (this._flatVelocity * this._headHeightSpeedMultiplier);
 
         // finally, set the position and rotation values
-        this.xPos = -this.headBobBobSideMovement * this.bobSwayFactor;
-        this.yPos = this.springPos * this.headBobJumpLandMove + this.bobFactor * this.headBobBobHeight * this.headBobFade * this.speedHeightFactor;
-        this.xTilt = -this.springPos * this.headBobJumpLandTilt;
-        this.zTilt = this.bobSwayFactor * this.headBobBobSwayAngle * this.headBobFade;
+        this._xPos = -this._headSideMovement * this._bobSwayFactor;
+        this._yPos = this._springPos * this._headJumpLandMove + this._bobFactor * this._headHeight * this._headBobFade * this._speedHeightFactor;
+        this._xTilt = -this._springPos * this._headJumpLandTilt;
+        this._zTilt = this._bobSwayFactor * this._headSwayAngle * this._headBobFade;
  
-        this.targetPos = (new Vec3(this.xPos * 3 , this.yPos * 3 , 0));
-        
-        var lerp =this.go.position.lerp(this.targetPos, this.lerpSpeed * deltaTime);
+        this._targetPos = (new Vec3(this._xPos * 3 , this._yPos * 3 , 0)); 
+        var lerp =this.go.position.lerp(this._targetPos, this._lerpSpeed * deltaTime);
         this.go.setPosition(lerp.clone()); 
-
-       this.thirdPersonCamera.setStepPos(lerp.clone());
- 
+        this.thirdPersonCamera.setStepPos(lerp.clone());
+        Vec3.lerp(this._targetRot, this._targetRot, new Vec3( this._xTilt * 3, 0,  this._zTilt * 3),this._lerpSpeed * deltaTime); 
+        this.cameraScript.setStepRot( this._targetRot.clone()); 
         
-       
-        Vec3.lerp(this.targetRot, this.targetRot, new Vec3( this.xTilt * 3, 0,  this.zTilt * 3),this.lerpSpeed * deltaTime); 
-       this.cameraScript.setStepRot( this.targetRot.clone()); 
-       
-       this.thirdPersonCamera.setStepRot( this.targetRot.clone());
- 
-       if(this.grounded){
-            if (this.headBobCycle > this.nextStepTime){
+        this.thirdPersonCamera.setStepRot( this._targetRot.clone());
+    
+        if(this._grounded){
+            if (this._headBobCycle > this._nextStepTime){
                 // time for next footstep sound:
-                this.nextStepTime = this.headBobCycle + 0.6;
+                this._nextStepTime = this._headBobCycle + 0.6;
                 // play footstep sounds
-                let randomIndex = Math.floor(Math.random() * this.footsteps.length);
-                let randomClip = this.footsteps[randomIndex];
+                let randomIndex = Math.floor(Math.random() * this._footsteps.length);
+                let randomClip = this._footsteps[randomIndex];
                 this.playSounds(randomClip);
             }
         }

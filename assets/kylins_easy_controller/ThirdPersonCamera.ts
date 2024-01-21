@@ -37,15 +37,17 @@ export class ThirdPersonCamera extends Component {
     @property
     useLen:boolean = false;
 
-    private _targetLen: number = 0;
-    private _targetAngles: Vec3 = v3();
-
     @property(UITransform)
     checkerCamera:UITransform = null;
 
     @property(UITransform)
     checkerMovement:UITransform = null;
 
+    _targetLen: number = 0;
+    _targetAngles: Vec3 = v3();
+    _isClickRotate : boolean = false;
+    _isClickMove : boolean = false;
+    _deltaTime: number = 0;
 
     start() {
         EasyController.on(EasyControllerEvent.CAMERA_ROTATE, this.onCameraRotate, this);
@@ -62,8 +64,6 @@ export class ThirdPersonCamera extends Component {
         this.checkerMovement.node.on(Input.EventType.TOUCH_END, this.onTouchUp_movement, this);
         this.checkerMovement.node.on(Input.EventType.TOUCH_CANCEL, this.onTouchUp_movement, this); 
     }
- 
-
 
     onDestroy() {
         EasyController.off(EasyControllerEvent.CAMERA_ROTATE, this.onCameraRotate, this);
@@ -78,12 +78,8 @@ export class ThirdPersonCamera extends Component {
         this.checkerMovement.node.off(Input.EventType.TOUCH_CANCEL, this.onTouchUp_movement, this); 
     }
 
-    isClickRotate : boolean = false;
-    isClickMove : boolean = false;
-    deltaTime: number = 0;
-
     lateUpdate(deltaTime: number) {
-        this.deltaTime = deltaTime;
+        this._deltaTime = deltaTime;
         if (!this.target) {
             return;
         }
@@ -92,46 +88,34 @@ export class ThirdPersonCamera extends Component {
         v3_1.set(this.node.eulerAngles);
         Vec3.lerp(v3_1, v3_1, this._targetAngles, t);
 
-
-        if(sys.isMobile){
-            //TODO! only tach screen
+        if(sys.isMobile){ 
             this.node.setRotationFromEuler(v3_1);
-
-           
-          if(this.isClickMove && !this.isClickRotate){
+          if(this._isClickMove && !this._isClickRotate){
                 const targetRotation = new Vec3(this.node.eulerAngles.x + this._stepRot.x, this.node.eulerAngles.y + this._stepRot.z, 0); 
                 var rot :Vec3 = new Vec3();
                 Vec3.lerp(rot, this.node.eulerAngles , targetRotation, t*5);//deltaTime * 20); 
                 this.node.eulerAngles = rot;
           } else{
-                if(this.isClickMove && this.isClickRotate){
+                if(this._isClickMove && this._isClickRotate){
                     const targetRotation = new Vec3(this.node.eulerAngles.x , this.node.eulerAngles.y + this._stepRot.z, 0); 
                     var rot :Vec3 = new Vec3();
                     Vec3.lerp(rot, this.node.eulerAngles , targetRotation, t*5);//deltaTime * 20); 
                     this.node.eulerAngles = rot;
                 }
           }
-        
         }
-
         //lookat
         v3_1.set(this.target.worldPosition);
         v3_1.add(this.lookAtOffset);
-
         //len and position
         this.len = 0;
         if(this.useLen){
             this.len = this.len * (1.0 - t) + this._targetLen * t;  
         }
-
         v3_2.set(this.node.forward);
         v3_2.multiplyScalar(this.len);
-
         v3_1.subtract(v3_2);
-        
         this.node.setPosition(v3_1.clone().add(this._stepPos));
-
-      
     } 
 
     _stepPos:Vec3 = v3();
@@ -155,39 +139,27 @@ export class ThirdPersonCamera extends Component {
                 deltaX = 0;
             }
         }
-        
- 
 
         var x = math.clamp((eulerAngles.x   ) + deltaX * ROTATION_STRENGTH, -60, 60); 
         this._targetAngles.set(
             x  , 
             (eulerAngles.y  ) + deltaY * ROTATION_STRENGTH , 
-            eulerAngles.z );    
-
-            /*
-
-        if(this.isClickMove && this.isClickRotate){
-            const t = Math.min(this.deltaTime / this.tweenTime, 1.0);
-            const targetRotation = new Vec3(this._targetAngles.x + this._stepRot.x, this._targetAngles.y + this._stepRot.z, 0); 
-            var rot :Vec3 = new Vec3();
-            Vec3.lerp(rot, this._targetAngles , targetRotation, t*5);//deltaTime * 20); 
-            this.node.eulerAngles = rot;
-        }*/
+            eulerAngles.z );   
     }
 
     onTouchDown_rotate(event: EventTouch) { 
-        this.isClickRotate = true;
+        this._isClickRotate = true;
     }
 
     onTouchUp_rotate(event: EventTouch) { 
-        this.isClickRotate = false;
+        this._isClickRotate = false;
     }
 
     onTouchDown_movement(event: EventTouch) { 
-        this.isClickMove = true;
+        this._isClickMove = true;
     }
     onTouchUp_movement(event: EventTouch) { 
-        this.isClickMove = false;
+        this._isClickMove = false;
     }
 
     onCameraZoom(delta: number) {

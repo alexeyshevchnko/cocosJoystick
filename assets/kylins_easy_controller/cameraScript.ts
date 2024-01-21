@@ -6,19 +6,18 @@ export class CameraScript extends Component {
 
     @property(Component)
     targetNode: Component = null; 
- 
-    screenCenterX: number;
-    screenCenterY: number;
-
-    maxAngle: number = 60;  
-    minAngle: number = -60;  
-    sensitivity: number = 0.05; 
-
-    private horizontalRotation: number = 0;
-    private verticalRotation: number = 0;
     @property
     tweenTime:number = 0.2;
 
+    _screenCenterX: number;
+    _screenCenterY: number;
+    _maxAngle: number = 60;  
+    _minAngle: number = -60;  
+    _sensitivity: number = 0.05; 
+    _horizontalRotation: number = 0;
+    _verticalRotation: number = 0;
+    _pointerLock: boolean =false;
+     
     start() {
         if(sys.isMobile){
             return;
@@ -30,59 +29,37 @@ export class CameraScript extends Component {
     }
 
     onMouseMove(event: MouseEvent) {  
-        this.horizontalRotation += event.movementX * this.sensitivity;
-        this.verticalRotation += event.movementY * this.sensitivity; 
-        this.verticalRotation = math.clamp(this.verticalRotation, this.minAngle, this.maxAngle); 
+        this._horizontalRotation += event.movementX * this._sensitivity;
+        this._verticalRotation += event.movementY * this._sensitivity; 
+        this._verticalRotation = math.clamp(this._verticalRotation, this._minAngle, this._maxAngle); 
     }
 
     _stepRot:Vec3 = v3();
-    public setStepRot(stepRot:Vec3){
-        this._stepRot = stepRot;
-     // this._stepRot = v3();
-    }
-    
+    setStepRot(stepRot:Vec3){
+        this._stepRot = stepRot; 
+    } 
+
     update(deltaTime: number) { 
-        if(sys.isMobile){
-            /*
-            const targetRotation = new Vec3( this._stepRot.x, 0, this._stepRot.z); 
-            var rot :Vec3 = new Vec3();
-            Vec3.lerp(rot, this.node.eulerAngles , targetRotation, deltaTime * 20); 
-            this.node.eulerAngles = rot;
- 
-            */
+        if(sys.isMobile){ 
             return;
-        } 
-
-
-        const targetRotation = new Vec3(-this.verticalRotation + this._stepRot.x, -this.horizontalRotation, this._stepRot.z); 
-
-        /*
-        const t = Math.min(deltaTime / this.tweenTime, 1.0);
-        var v3_1 : Vec3 = v3();
-        v3_1.set(this.node.eulerAngles);
-        Vec3.lerp(v3_1, v3_1, targetRotation, t *5);
-        this.node.setRotationFromEuler(v3_1);
-       */
-        
+        }  
+        const targetRotation = new Vec3(-this._verticalRotation + this._stepRot.x, -this._horizontalRotation, this._stepRot.z);  
         var rot :Vec3 = new Vec3();
         Vec3.lerp(rot, this.node.eulerAngles , targetRotation, deltaTime * 20); 
-        this.node.eulerAngles = rot; 
-        
+        this.node.eulerAngles = rot;  
     }
 
-    pointerLock: boolean =false;
-    //эта хрень выкючает курсор 
     onMouseDown(event:EventMouse){ 
-        if(!this.pointerLock){
+        if(!this._pointerLock){
             if (game.canvas.requestPointerLock) {
                 game.canvas.requestPointerLock();
-                this.pointerLock = true;
+                this._pointerLock = true;
                 window.removeEventListener("mousemove", this.onMouseMove.bind(this));
             } 
         }else{
             if (document.exitPointerLock) {
                 document.exitPointerLock();
-                this.pointerLock = false;
+                this._pointerLock = false;
                 window.addEventListener("mousemove", this.onMouseMove.bind(this));
             } 
         }
