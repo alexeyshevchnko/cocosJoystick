@@ -1,8 +1,8 @@
 import { _decorator, Component, Input, Vec3, input,  game, Node, tween, EventMouse, sys, math, renderer, Camera, view, v3 } from 'cc'; 
 const { ccclass, property } = _decorator;
  
-@ccclass('CameraScript')
-export class CameraScript extends Component {
+@ccclass('DesktopCamera')
+export class DesktopCamera extends Component {
 
     @property(Component)
     targetNode: Component = null; 

@@ -3351,63 +3351,6 @@
     ]
   },
   {
-    "__type__": "dc275HwqLZO2aljnAXsTNbl",
-    "_name": "",
-    "_objFlags": 0,
-    "__editorExtras__": {},
-    "node": {
-      "__id__": 5
-    },
-    "_enabled": true,
-    "__prefab": null,
-    "thirdPersonCamera": {
-      "__id__": 16
-    },
-    "cameraScript": {
-      "__id__": 15
-    },
-    "go": {
-      "__id__": 6
-    },
-    "playerNode": {
-      "__id__": 17
-    },
-    "LookSensitivity": 2,
-    "ShootSensitivity": 1,
-    "Smooth": 25,
-    "myAudioSource": {
-      "__id__": 290
-    },
-    "myAudioSourceJamp": {
-      "__id__": 291
-    },
-    "footstep1": {
-      "__uuid__": "3e15ab2c-9b49-42fe-b79f-d49d808ac7ee",
-      "__expectedType__": "cc.AudioClip"
-    },
-    "footstep2": {
-      "__uuid__": "4c26c516-cf08-4c6e-b925-12af95d43023",
-      "__expectedType__": "cc.AudioClip"
-    },
-    "footstep3": {
-      "__uuid__": "a9b3a93a-984f-434d-ad80-424d432c6c3a",
-      "__expectedType__": "cc.AudioClip"
-    },
-    "footstep4": {
-      "__uuid__": "f5354d00-0c2b-44f0-ba92-ffd854da10bb",
-      "__expectedType__": "cc.AudioClip"
-    },
-    "jampClip": {
-      "__uuid__": "7d4dd2a8-bc17-4d7c-a311-c764c411253c",
-      "__expectedType__": "cc.AudioClip"
-    },
-    "landClip": {
-      "__uuid__": "065e2ff5-1c34-463b-9082-1ee37d92597a",
-      "__expectedType__": "cc.AudioClip"
-    },
-    "_id": "834XUK3WBInY0Zq3wJ3WPf"
-  },
-  {
     "__type__": "cc.AudioSource",
     "_name": "",
     "_objFlags": 0,
@@ -3438,6 +3381,63 @@
     "_playOnAwake": false,
     "_volume": 0.6,
     "_id": "caM0xtL8FHGIniSVT4+hcG"
+  },
+  {
+    "__type__": "dc275HwqLZO2aljnAXsTNbl",
+    "_name": "",
+    "_objFlags": 0,
+    "__editorExtras__": {},
+    "node": {
+      "__id__": 5
+    },
+    "_enabled": true,
+    "__prefab": null,
+    "thirdPersonCamera": {
+      "__id__": 16
+    },
+    "cameraScript": {
+      "__id__": 15
+    },
+    "myAudioSource": {
+      "__id__": 289
+    },
+    "myAudioSourceJamp": {
+      "__id__": 289
+    },
+    "footstep1": {
+      "__uuid__": "e9217309-afb1-4ebf-abc1-2e8e9eadd594",
+      "__expectedType__": "cc.AudioClip"
+    },
+    "footstep2": {
+      "__uuid__": "035bc877-3871-453e-b245-bd559fca0bcc",
+      "__expectedType__": "cc.AudioClip"
+    },
+    "footstep3": {
+      "__uuid__": "a96097fa-bd9d-4481-9dfc-e6b50ea46ae7",
+      "__expectedType__": "cc.AudioClip"
+    },
+    "footstep4": {
+      "__uuid__": "80e2f7bf-ce97-4255-9124-fd149d936c18",
+      "__expectedType__": "cc.AudioClip"
+    },
+    "jampClip": {
+      "__uuid__": "9c569eaa-b750-4b6c-9c13-fe4347e348bd",
+      "__expectedType__": "cc.AudioClip"
+    },
+    "landClip": {
+      "__uuid__": "adb8cae4-6196-4866-96a5-71af590f2729",
+      "__expectedType__": "cc.AudioClip"
+    },
+    "go": {
+      "__id__": 6
+    },
+    "playerNode": {
+      "__id__": 17
+    },
+    "LookSensitivity": 2,
+    "ShootSensitivity": 1,
+    "Smooth": 25,
+    "_id": "a0LtmW7J5ANp3waniHJmlF"
   },
   {
     "__type__": "cc.Node",

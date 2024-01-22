@@ -1,14 +1,14 @@
 import { _decorator, AudioClip, AudioSource, CapsuleCollider, Component, director, game, geometry, math, Node, physics, PhysicsSystem, Quat, random, v3, Vec3 } from 'cc';
 import { ThirdPersonCamera } from './ThirdPersonCamera';
-import { CameraScript } from './CameraScript';
+import { DesktopCamera } from './DesktopCamera';
 const { ccclass, property } = _decorator;
 
 @ccclass('StepController')
 export class StepController extends Component {
     @property(ThirdPersonCamera)
     thirdPersonCamera : ThirdPersonCamera = null;
-    @property(CameraScript)
-    cameraScript : CameraScript = null;
+    @property(DesktopCamera)
+    cameraScript : DesktopCamera = null;
     @property(AudioSource)
     myAudioSource : AudioSource = null;
     @property(AudioSource)
