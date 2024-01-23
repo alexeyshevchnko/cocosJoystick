@@ -43,6 +43,7 @@ cocosJoystick virtual joystick to control the movement of a first-person charact
 #### CONTACT
 Welcome to following my Telegram:
 https://t.me/alShevch 
+alexeyshevchenko88@gmail.com
 So that you can message me directly and get the latest information about cocosJoystick.
 
 ================================
