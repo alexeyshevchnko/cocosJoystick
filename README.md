@@ -1,7 +1,7 @@
 # cocosJoystick  
-For Cocos Creator 3.x based on the OpenTGX project https://github.com/MrKylinGithub/OpenTGX/tree/main
+For Cocos Creator 3.x based on the OpenTGX project https://github.com/MrKylinGithub/OpenTGX
 
-Для  Cocos Creator 3.x на основе OpenTGX проекта https://github.com/MrKylinGithub/OpenTGX/tree/main
+Для  Cocos Creator 3.x на основе OpenTGX проекта https://github.com/MrKylinGithub/OpenTGX
 Этот проект представляет собой реализацию управления персонажем от первого лица для приложений, предназначенных для работы как на мобильных устройствах, так и на компьютерах.
 
 ## Описание
