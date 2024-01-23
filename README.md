@@ -23,3 +23,7 @@ cocosJoystick virtual joystick to control the movement of a first-person charact
 - Virtual joystick for movement control
 - Compatibility with both mobile devices and computers
 - Easy integration into projects using Cocos Creator
+
+Welcome to following my Telegram:
+https://t.me/alShevch 
+So that you can message me directly and get the latest information about cocosJoystick.
