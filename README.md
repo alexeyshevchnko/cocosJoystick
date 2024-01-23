@@ -1,11 +1,7 @@
-# cocosJoystick  
-
-=====================================================
+# cocosJoystick   
 
 ## DEMO 
-https://yandex.ru/games/app/234094?draft=true&lang=ru
-
-=====================================================
+https://yandex.ru/games/app/234094?draft=true&lang=ru 
 
 ## ENG -------------------------------------------------------
 
