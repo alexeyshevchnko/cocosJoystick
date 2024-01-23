@@ -13,6 +13,8 @@ export class StepController extends Component {
     myAudioSource : AudioSource = null;
     @property(AudioSource)
     myAudioSourceJamp : AudioSource = null;
+    @property(AudioSource)
+    myAudioSourceLand : AudioSource = null;
     @property(AudioClip)  
     footstep1 : AudioClip = null;
     @property(AudioClip)  
@@ -80,6 +82,8 @@ export class StepController extends Component {
     _headHeight: number = 0.3;
     _headJumpLandTilt: number = 10;
     _headSwayAngle: number = 0.5;
+    _timePlayJampClip: number = 0.5;
+    _timePlayStepClip: number = 0.5;
 
     checkGrounded() {
        
@@ -98,17 +102,23 @@ export class StepController extends Component {
         this._grounded = bResult; 
         
         if(oldIsGrounded && !this._grounded){
-            this.PlayFootstepSoundJamp(this.jampClip);
+            this.playSound(this.myAudioSourceJamp , this.jampClip);
+            this._timePlayJampClip = game.totalTime;
         }
+
 
         if(!oldIsGrounded && this._grounded){
-            this.PlayFootstepSoundJamp(this.landClip);
+            this.playSound(this.myAudioSourceLand, this.landClip);
+            
+                 console.log("Playland ");
         }
+
     }
 
-    PlayFootstepSoundJamp(clip: AudioClip) { 
-        this.myAudioSourceJamp.clip = clip;
-        this.myAudioSourceJamp.play(); 
+    playSound(source: AudioSource,  clip: AudioClip) { 
+        source.stop();
+        source.clip = clip;
+        source.play(); 
     }
 
     start(): void {
@@ -198,7 +208,7 @@ export class StepController extends Component {
         
         this.thirdPersonCamera.setStepRot( this._targetRot.clone());
     
-        if(this._grounded){
+        if(this._grounded){ 
             if (this._headBobCycle > this._nextStepTime){
                 // time for next footstep sound:
                 this._nextStepTime = this._headBobCycle + 0.6;
@@ -206,7 +216,8 @@ export class StepController extends Component {
                 let randomIndex = Math.floor(Math.random() * this._footsteps.length);
                 let randomClip = this._footsteps[randomIndex];
                 this.playSounds(randomClip);
-            }
+                this._timePlayStepClip = game.totalTime;
+            } 
         }
     }
  
