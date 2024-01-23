@@ -44,13 +44,13 @@ cocosJoystick virtual joystick to control the movement of a first-person charact
 - Easy integration into projects using Cocos Creator
 
 
-=====================================================
-=====================================================
+================================
+================================
 
 #### CONTACT
 Welcome to following my Telegram:
 https://t.me/alShevch 
 So that you can message me directly and get the latest information about cocosJoystick.
 
-=====================================================
-=====================================================
+================================
+================================
