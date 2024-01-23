@@ -7,14 +7,11 @@ https://yandex.ru/games/app/234094?draft=true&lang=ru
 
 =====================================================
 
-=====================================================
-
 ## ENG
 For Cocos Creator 3.x based on the OpenTGX project https://github.com/MrKylinGithub/OpenTGX
 
 =====================================================
 
-=====================================================
 
 ## RU
 Для  Cocos Creator 3.x на основе OpenTGX проекта https://github.com/MrKylinGithub/OpenTGX
