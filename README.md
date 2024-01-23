@@ -7,13 +7,13 @@ https://yandex.ru/games/app/234094?draft=true&lang=ru
 
 =====================================================
 
-## ENG
+## ENG ==============================================
 For Cocos Creator 3.x based on the OpenTGX project https://github.com/MrKylinGithub/OpenTGX
 
 =====================================================
 
 
-## RU
+## RU ==============================================
 Для  Cocos Creator 3.x на основе OpenTGX проекта https://github.com/MrKylinGithub/OpenTGX
 Этот проект представляет собой реализацию управления персонажем от первого лица для приложений, предназначенных для работы как на мобильных устройствах, так и на компьютерах.
 
@@ -29,7 +29,7 @@ cocosJoystick виртуального джойстика, который поз
 
 =====================================================
 
-## ENG
+## ENG ==============================================
 ### Description
 
 cocosJoystick virtual joystick to control the movement of a first-person character in the game. The project is designed to provide convenient and intuitive control on both mobile devices and desktops.
