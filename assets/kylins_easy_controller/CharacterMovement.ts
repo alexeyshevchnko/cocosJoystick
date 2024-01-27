@@ -19,7 +19,7 @@ export class CharacterMovement extends Component {
     @property
     maxJumpTimes: number = 0;
     private _curJumpTimes: number = 0;
-
+/*
     @property(AnimationClip)
     idleAnimClip: AnimationClip;
 
@@ -35,21 +35,22 @@ export class CharacterMovement extends Component {
     @property(AnimationClip)
     jumpLandAnimClip: AnimationClip;
 
+    */
     _rigidBody: RigidBody;
     _isMoving: boolean = false;
     _velocityScale: number = 1.0;
 
     _isInTheAir: boolean = false;
     _currentVerticalVelocity: number = 0.0;
-
+/*
     private _anim: SkeletalAnimation;
-
+*/
     start() {
         if (!this.mainCamera) {
             this.mainCamera = find('Main Camera')?.getComponent(Camera);
         }
         this._rigidBody = this.node.getComponent(RigidBody);
-        this._anim = this.node.getComponent(SkeletalAnimation);
+       /* this._anim = this.node.getComponent(SkeletalAnimation);
         if (this._anim) {
             let clipArr = [
                 this.idleAnimClip,
@@ -69,7 +70,7 @@ export class CharacterMovement extends Component {
             if (this.idleAnimClip) {
                 this._anim.play(this.idleAnimClip.name);
             }
-        }
+        }*/
 
         EasyController.on(EasyControllerEvent.MOVEMENT, this.onMovement, this);
         EasyController.on(EasyControllerEvent.MOVEMENT_STOP, this.onMovementRelease, this);
@@ -121,6 +122,7 @@ export class CharacterMovement extends Component {
         }
 
         if (this._isInTheAir) {
+            /*
             if(this.jumpBeginAnimClip && this._anim){
                 let state = this._anim.getState(this.jumpBeginAnimClip.name);
                 if(state.isPlaying && state.current >= state.duration){
@@ -128,7 +130,7 @@ export class CharacterMovement extends Component {
                         this._anim.crossFade(this.jumpLoopAnimClip.name);
                     }
                 }
-            }
+            }*/
 
             if(!this._rigidBody){
                 this._currentVerticalVelocity -= 9.8 * deltaTime;
@@ -148,6 +150,7 @@ export class CharacterMovement extends Component {
         this._isInTheAir = false;
         this._currentVerticalVelocity = 0.0;
         this._curJumpTimes = 0;
+        /*
         if (this.moveAnimClip) {
             if(this._isMoving){
                 this._anim.crossFade(this.moveAnimClip.name, 0.5);
@@ -155,7 +158,7 @@ export class CharacterMovement extends Component {
             else{
                 this._anim.crossFade(this.idleAnimClip.name, 0.5);
             }
-        }
+        }*/
     }
 
     private _tmp = v3();
@@ -175,6 +178,7 @@ export class CharacterMovement extends Component {
         //равен 0, поэтому требуется -90 градусов. (Поворот на 90 градусов по часовой стрелке)
         this._tmp.set(0, cameraRotationY + degree - 90 + 180, 0);
         this.node.setRotationFromEuler(this._tmp);
+        /*
         if (this._anim) {
             if (!this._isMoving && !this._isInTheAir) {
                 if (this.moveAnimClip) {
@@ -184,14 +188,15 @@ export class CharacterMovement extends Component {
             if (this.moveAnimClip) {
                 this._anim.getState(this.moveAnimClip.name).speed = this._velocityScale;
             }
-        }
+        }*/
         this._isMoving = true;
 
     }
     onMovementRelease() {
+        /*
         if (!this._isInTheAir && this.idleAnimClip) {
             this._anim?.crossFade(this.idleAnimClip.name, 0.5);
-        }
+        }*/
         this._isMoving = false;
         if (this._rigidBody) {
             this._rigidBody.setLinearVelocity(Vec3.ZERO);
@@ -205,11 +210,12 @@ export class CharacterMovement extends Component {
         if (this._curJumpTimes >= this.maxJumpTimes) {
             return;
         }
+        /*
         if(this._curJumpTimes == 0 || true){
             if(this.jumpBeginAnimClip){
                 this._anim?.crossFade(this.jumpBeginAnimClip.name);
             }
-        }
+        }*/
         this._curJumpTimes++;
         if(this._rigidBody){
             this._rigidBody.getLinearVelocity(v3_1);
